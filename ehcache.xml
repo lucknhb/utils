@@ -1,0 +1,30 @@
+<ehcache>
+    <diskStore path="java.io.tmpdir"/>
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="false"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            />
+    <cache name="passwordTryCount"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="300"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="120"/>
+    <cache name="kickOut"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="1800"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="120"/>
+</ehcache>
+
+
