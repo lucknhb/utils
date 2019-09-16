@@ -26,8 +26,6 @@ public class GlobalIdUtil {
     /**
      * 各数据所占位数
      */
-    private final long markBits = 1L;
-    private final long timeStampBits = 41L;
     private final long dataCenterIdBits = 5L;
     private final long workerIdBits = 5L;
     private final long sequenceNumberBits = 12L;
@@ -36,7 +34,7 @@ public class GlobalIdUtil {
      */
     private final long timeStampShift = workerIdBits + dataCenterIdBits + sequenceNumberBits;
     private final long dataCenterIdShift = workerIdBits + sequenceNumberBits;
-    private final long workerIdShift = sequenceNumberBits;
+    private final long machineIdShift = sequenceNumberBits;
     /**
      * 开始时间戳  2019-9-4
      */
@@ -48,7 +46,7 @@ public class GlobalIdUtil {
     /**
      * 机器编码 范围 2^5 - 1 即 0-31
      */
-    private long workerId;
+    private long machineId;
     /**
      * 序列号 范围 2^12-1 0-4095
      */
@@ -61,7 +59,7 @@ public class GlobalIdUtil {
      * 数据中心最大序号 2^5 -1
      */
     private final long maxDataCenterId = -1L ^ (-1L << dataCenterIdBits);
-    private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
+    private final long maxMachineId = -1L ^ (-1L << workerIdBits);
     private final long maxSequenceNumber = -1L ^ (-1L << sequenceNumberBits);
 
     /**
@@ -70,15 +68,15 @@ public class GlobalIdUtil {
     private final AtomicLong waitCount = new AtomicLong(0);
 
 
-    public GlobalIdUtil(long dataCenterId, long workerId) {
+    public GlobalIdUtil(long dataCenterId, long machineId) {
         if (dataCenterId > maxDataCenterId || dataCenterId < 0) {
             throw new GlobalIdException("数据中心编号有误");
         }
-        if (workerId > maxWorkerId || workerId < 0) {
+        if (machineId > maxMachineId || machineId < 0) {
             throw new GlobalIdException("机器编号有误");
         }
         this.dataCenterId = dataCenterId;
-        this.workerId = workerId;
+        this.machineId = machineId;
     }
 
     public synchronized long nextId() {
@@ -96,7 +94,7 @@ public class GlobalIdUtil {
         lastTimeStamp = currentTimeStamp;
         return ((currentTimeStamp - startTime) << timeStampShift)|
                 (dataCenterId << dataCenterIdShift)|
-                (workerId << workerIdShift)|
+                (machineId << machineIdShift)|
                 sequenceNumber;
     }
 
